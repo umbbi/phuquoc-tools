@@ -155,6 +155,22 @@ async function copyTranslatedText() {
   }
 }
 
+function speakWithBrowserTts(text, language) {
+  if (!('speechSynthesis' in window)) {
+    showToast('이 브라우저는 음성 재생 미지원');
+    return false;
+  }
+
+  window.speechSynthesis.cancel();
+  const utterance = new SpeechSynthesisUtterance(text);
+  utterance.lang = language;
+  utterance.rate = 0.92;
+  utterance.pitch = 1;
+  window.speechSynthesis.speak(utterance);
+  showToast('브라우저 음성 재생 중');
+  return true;
+}
+
 function playTranslatedSpeech() {
   const text = elements.translatedText.textContent.trim();
   if (!text) {
@@ -162,11 +178,31 @@ function playTranslatedSpeech() {
     return;
   }
 
-  elements.ttsPlayer.src = getGoogleTtsUrl(text, 'vi');
+  elements.ttsPlayer.pause();
+  elements.ttsPlayer.removeAttribute('src');
+  elements.ttsPlayer.load();
+
+  const audioUrl = getGoogleTtsUrl(text, 'vi');
+  const fallbackTimer = setTimeout(() => {
+    if (elements.ttsPlayer.paused && elements.ttsPlayer.currentTime === 0) {
+      speakWithBrowserTts(text, 'vi-VN');
+    }
+  }, 1200);
+
+  const handleAudioError = () => {
+    clearTimeout(fallbackTimer);
+    elements.ttsPlayer.removeEventListener('error', handleAudioError);
+    speakWithBrowserTts(text, 'vi-VN');
+  };
+
+  elements.ttsPlayer.addEventListener('error', handleAudioError, { once: true });
+  elements.ttsPlayer.src = audioUrl;
   elements.ttsPlayer.play().then(() => {
+    clearTimeout(fallbackTimer);
     showToast('구글 TTS 재생 중');
   }).catch(() => {
-    showToast('오디오 재생 실패');
+    clearTimeout(fallbackTimer);
+    speakWithBrowserTts(text, 'vi-VN');
   });
 }
 
