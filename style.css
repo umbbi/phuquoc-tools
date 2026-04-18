@@ -248,19 +248,6 @@ button, input, textarea { font: inherit; }
   white-space: nowrap;
   font-weight: 800;
 }
-.swap-button {
-  appearance: none;
-  border: var(--border);
-  border-radius: 20px;
-  width: 52px;
-  height: 52px;
-  margin: 0 auto;
-  background: var(--pink);
-  color: var(--ink);
-  font-size: 24px;
-  font-weight: 900;
-  box-shadow: var(--shadow-small);
-}
 .quick-amounts,
 .quick-phrases {
   display: flex;
@@ -486,15 +473,15 @@ button, input, textarea { font: inherit; }
   .app-shell { padding-top: 24px; }
 }
 
-button, .chip, .quick-phrase-chip, .action-button, .swap-button {
+button, .chip, .quick-phrase-chip, .action-button {
   -webkit-tap-highlight-color: transparent;
 }
 
 button:active,
 .chip:active,
 .quick-phrase-chip:active,
-.action-button:active,
-.swap-button:active {
+.action-button:active {
   transform: translate(3px, 3px);
   box-shadow: 1px 1px 0 #111111;
 }
+

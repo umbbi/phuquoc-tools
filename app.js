@@ -35,7 +35,6 @@ const elements = {
   rateUpdated: document.getElementById('rateUpdated'),
   vndInput: document.getElementById('vndInput'),
   krwInput: document.getElementById('krwInput'),
-  swapBtn: document.getElementById('swapBtn'),
   translateInput: document.getElementById('translateInput'),
   translateBtn: document.getElementById('translateBtn'),
   translatedText: document.getElementById('translatedText'),
@@ -104,18 +103,6 @@ function convertFromKrw() {
   updateSummary(vnd, krw);
 }
 
-function swapValues() {
-  const currentVnd = elements.vndInput.value;
-  elements.vndInput.value = elements.krwInput.value;
-  elements.krwInput.value = currentVnd;
-  if (state.mode === 'vnd-to-krw') {
-    state.mode = 'krw-to-vnd';
-    convertFromKrw();
-  } else {
-    state.mode = 'vnd-to-krw';
-    convertFromVnd();
-  }
-}
 
 function showToast(message) {
   elements.toast.textContent = message;
@@ -319,8 +306,6 @@ function bindEvents() {
     state.mode = 'krw-to-vnd';
     convertFromKrw();
   });
-
-  elements.swapBtn.addEventListener('click', swapValues);
 
   document.querySelectorAll('.amount-chip').forEach((button) => {
     button.addEventListener('click', () => {
