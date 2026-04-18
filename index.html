@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#081423" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <title>Phu Quoc Tools</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="hero-card">
+        <div class="hero-topline">PHU QUOC NIGHT UTILITY</div>
+        <h1>푸꾸옥 여행 도구</h1>
+        <p class="hero-subtitle">현지에서 바로 쓰는 시간 · 환율 · 문장 · 실전 팁</p>
+
+        <div class="weather-row">
+          <div class="weather-chip">☁️ <span id="weatherText">날씨 불러오는 중</span></div>
+          <div class="weather-chip">📍 Phu Quoc</div>
+        </div>
+
+        <div class="time-grid">
+          <div class="time-bubble">
+            <div class="time-label">푸꾸옥</div>
+            <div class="time-value" id="phuQuocTime">--:--</div>
+            <div class="time-date" id="phuQuocDate">--</div>
+          </div>
+          <div class="time-diff">+ 2시간</div>
+          <div class="time-bubble time-bubble-secondary">
+            <div class="time-label">서울</div>
+            <div class="time-value" id="seoulTime">--:--</div>
+            <div class="time-date" id="seoulDate">--</div>
+          </div>
+        </div>
+      </header>
+
+      <main class="content-stack">
+        <section class="card card-currency">
+          <div class="section-title-row">
+            <h2>환율 계산</h2>
+            <span class="mini-note" id="rateUpdated">환율 준비 중</span>
+          </div>
+
+          <div class="converter-stack">
+            <label class="field-block">
+              <span class="field-label">베트남 VND</span>
+              <div class="input-row">
+                <input id="vndInput" inputmode="numeric" type="text" value="100000" />
+                <span class="field-unit">동</span>
+              </div>
+            </label>
+
+            <button class="swap-button" id="swapBtn" type="button" aria-label="통화 전환">⇅</button>
+
+            <label class="field-block">
+              <span class="field-label">대한민국 KRW</span>
+              <div class="input-row">
+                <input id="krwInput" inputmode="numeric" type="text" value="5640" />
+                <span class="field-unit">원</span>
+              </div>
+            </label>
+          </div>
+
+          <div class="quick-amounts">
+            <button type="button" class="chip amount-chip" data-vnd="100000">10만동</button>
+            <button type="button" class="chip amount-chip" data-vnd="200000">20만동</button>
+            <button type="button" class="chip amount-chip" data-vnd="500000">50만동</button>
+            <button type="button" class="chip amount-chip" data-vnd="1000000">100만동</button>
+            <button type="button" class="chip amount-chip" data-vnd="2000000">200만동</button>
+          </div>
+
+          <div class="summary-box" id="rateSummary">100,000동 ≈ 5,640원</div>
+        </section>
+
+        <section class="card translator-card">
+          <div class="section-title-row">
+            <h2>언어 번역</h2>
+            <span class="mini-note">한 화면에서 입력 · 번역 · 발음</span>
+          </div>
+
+          <div class="translator-shell">
+            <div class="translator-language-row">
+              <span class="lang-pill">KO 한국어</span>
+              <span class="translator-arrow">→</span>
+              <span class="lang-pill lang-pill-target">VI 베트남어</span>
+            </div>
+
+            <label class="translator-pane">
+              <span class="translator-label">입력</span>
+              <textarea id="translateInput" class="translator-textarea" placeholder="예: 기사님, 뉴월드 푸꾸옥 리조트로 가주세요.">뉴월드 푸꾸옥 리조트로 가주세요.</textarea>
+            </label>
+
+            <div class="translator-actions">
+              <button type="button" class="action-button action-button-primary" id="translateBtn">번역</button>
+              <button type="button" class="action-button" id="copyTranslatedBtn">복사</button>
+              <button type="button" class="action-button action-button-audio" id="speakTranslatedBtn">구글 TTS</button>
+            </div>
+
+            <div class="translator-pane translator-output-pane">
+              <div class="translator-output-top">
+                <span class="translator-label">번역 결과</span>
+                <span class="translator-status" id="translateStatus">기본 문장 준비됨</span>
+              </div>
+              <div class="translator-output-text" id="translatedText">Đưa tôi đến New World Phu Quoc Resort.</div>
+            </div>
+
+            <div class="quick-phrases" id="quickPhraseList"></div>
+            <audio id="ttsPlayer" preload="none"></audio>
+          </div>
+        </section>
+
+        <section class="card tips-card">
+          <div class="section-title-row">
+            <h2>푸꾸옥 실전 팁</h2>
+            <span class="mini-note">뉴월드 기준 포함</span>
+          </div>
+          <div class="tips-list" id="tipsList"></div>
+        </section>
+
+        <section class="card quick-info-card">
+          <div class="section-title-row">
+            <h2>빠른 정보</h2>
+          </div>
+          <ul class="quick-info-list">
+            <li><strong>공항 → 뉴월드 리조트</strong><span>차로 약 20~25분</span></li>
+            <li><strong>결제</strong><span>카드 우선, 현지통화 결제</span></li>
+            <li><strong>현금</strong><span>공항에서 소액 ATM 출금이 현실적</span></li>
+            <li><strong>날씨</strong><span>덥고 습함, 짧은 스콜 가능</span></li>
+          </ul>
+        </section>
+      </main>
+
+      <div class="toast" id="toast"></div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>
